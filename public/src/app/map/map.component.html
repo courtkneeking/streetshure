@@ -1,0 +1,164 @@
+<body>
+<!-- info popup  -->
+<div id = "info" class= "popup">
+  <span class = "popuptext" id= "signInfoPopup">{{this.temp}}</span>
+</div>
+<!-- info popup  -->
+
+<!-- top navbar  -->
+<div id = "settings_shell">
+  <div id = "settings_menu">
+    <button (mouseover) = "showAlert($event, this.tutorial.info)" (click)= "showSettingsButtons()" class=" dropdown-toggle" type="button">
+        <img src = "assets/images/menu.png">
+    </button>
+    <button class = "popup" (mouseover) = "showAlert($event, this.tutorial.info)" >
+        <img src = "assets/images/info.png" >
+        <span class="popuptext" id="infoPopup">{{this.tutorial.info.message}}</span>
+      </button>
+  </div>
+  <div id = "home_button">
+    <button [routerLink]= "['home']" >
+      <img src = "assets/images/house.png">
+    </button>
+    <button class = "popup" (mouseover) = "showAlert($event, this.tutorial.home)" >
+      <img src = "assets/images/info.png" >
+      <span class="popuptext" id="homePopup">{{this.tutorial.home.message}}</span>
+    </button>
+  </div>
+  <div id = "confirm_marker">
+    <button class = "popup" *ngIf= "locationMarker.draggable == true" (mouseover) = "showAlert($event, this.tutorial.location)" >
+      <img src = "assets/images/info.png" >
+      <span class="popuptext" id="locationPopup">{{this.tutorial.location.message}}</span>
+    </button>
+    <button class = "navbar_buttons" *ngIf= "locationMarker.draggable == true" (click) = "confirmMarker(this.locationMarker)">
+      Confirm location  <img src = "assets/images/right_arrow.png">
+    </button> 
+    <button  class = "navbar_buttons" *ngIf= "locationMarker.draggable == false" (click) = "changeMarker(this.locationMarker)">
+      <img src = "assets/images/left_arrow.png"> Change location
+    </button> 
+  </div>
+</div>
+<!-- top navbar  -->
+
+<!-- map -->
+  <agm-map [latitude]="location.lat" [longitude]="location.lng" [zoom] = "map.zoom">
+    <agm-marker (dragEnd) = "stopMarker($event, this.locationMarker)" [latitude]="location.lat" [longitude]="location.lng" [markerDraggable] = "locationMarker.draggable" [iconUrl]= "locationMarker.iconUrl" ></agm-marker> 
+    <div *ngIf = "show.spots == true">
+      <div *ngFor = "let sp of spots">
+        <agm-marker 
+          [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "markers.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.markers">
+          <div *ngFor = "let s of sp.sign">
+            <div *ngIf = "show.street_cleaning == true">
+              <div *ngIf = "s.category == 'street_cleaning'">
+                <agm-snazzy-info-window [padding] = "infoWindow.padding">
+                  <ng-template>
+                    <div class = "sign">  
+                      <img class = "{{s.active}}" src = "{{s.image}}">
+                      <div class = "sign_text">
+                        {{s.type}}<br>
+                        <span class = "centered">
+                          {{s.days}}<br>{{s.time}}<br>
+                          <button *ngIf = "s.active == 'inactive_opacity'"  (click) = "parkHere(s)">Park</button>
+                          <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                              <img src = "assets/images/b_info.png" >
+                          </button>
+                        </span>
+                      </div>
+                    </div>
+                  </ng-template>
+                </agm-snazzy-info-window>
+              </div>
+            </div>
+            <div *ngIf = "show.meter == true">
+              <div *ngIf = "s.category == 'meter'">
+                <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                    <ng-template>
+                      <div class = "sign">
+                        <img class = "{{s.active}}" src = "{{s.image}}">
+                        <div class = "sign_text">
+                          {{s.type}}<br>
+                          <span class = "centered">
+                            {{s.days}}<br>{{s.time}}<br>
+                            <button (click) = "parkHere(s)">Park</button>
+                            <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                <img src = "assets/images/b_info.png" >
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </agm-snazzy-info-window>
+              </div>
+            </div>
+            <div *ngIf = "show.other == true">
+              <div *ngIf = "s.category == 'other'">
+                <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                  <ng-template>
+                    <div class = "sign">
+                      <img class = "{{s.active}}" src = "{{s.image}}">
+                      <div class = "sign_text">
+                        {{s.type}}<br>
+                        <span class = "centered">
+                          {{s.days}}<br>{{s.time}}<br>
+                          <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                          <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                          <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                              <img src = "assets/images/b_info.png" >
+                          </button>
+                        </span>
+                      </div>
+                    </div>
+                  </ng-template>
+                </agm-snazzy-info-window>
+              </div>
+            </div>
+          </div>
+        </agm-marker>
+      </div>
+    </div>
+    <div *ngIf = "show.garages == true">
+      <div *ngFor = "let g of garages">
+        <agm-marker 
+          [latitude]= "g.geometry.coordinates[1]" [longitude]= "g.geometry.coordinates[0]" [iconUrl]= "garageMarkers.iconUrl" (markerClick)= "clickGarage(g)">
+          <agm-info-window>{{g.geometry.coordinates[1]}}, {{g.geometry.coordinates[0]}}</agm-info-window>
+        </agm-marker>
+      </div>
+    </div>
+    <div *ngIf = "show.parked == true">
+      <agm-marker [latitude]="parked.lat" [longitude]="parked.lng" [iconUrl]= "parkedMarker.iconUrl" ></agm-marker> 
+    </div>
+  </agm-map>
+<!-- map -->
+<!-- bottom navbar -->
+<div id = "filters_shell" >
+  <div *ngFor = "let t of types" class = "types">
+    <div *ngIf = "t.show == true" class = "active" >
+      <span class = "text">
+        <button (click) = "changeFilters(t)">{{t.name}}</button>
+      </span>  
+    </div>
+    <div *ngIf = "t.show == false" class = "nonactive">
+      <span class = "text">
+        <button (click) = "changeFilters(t)">{{t.name}}</button>
+      </span>
+    </div> 
+  </div>
+</div>
+<!-- bottom navbar -->
+
+<!-- settings drop down (from top navbar) -->
+<div *ngIf= "show.buttons == true" class = "expand">
+    <div id = "settings_dropdown">
+        <div id = "settings_button_group" class="btn-group-vertical" role="group" aria-label="...">
+          <div *ngFor = "let s of settings">
+            <button (click)= "showSettings(s)" type = "button" class = "settings_inputs">
+              {{s.name}}
+            </button>
+          </div>
+        </div>
+    </div>
+</div>
+<!-- settings drop down (from top navbar) -->
+
+<!-- map  -->
+</body>

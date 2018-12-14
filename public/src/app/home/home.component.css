@@ -1,0 +1,83 @@
+* {
+    font-size: 10px;
+}
+#settings_shell {
+    height: 8vh;
+    width: 100%;
+    background-color: #7a9eb1;
+    text-align: center;
+}
+.navbar_buttons{
+    padding: 3vh;
+}
+img {
+    height: 15px;
+    width: 15px;
+}
+#page{
+    background-color: lightgray;
+    height: 84vh;
+    width: 100vw;
+    padding: 20vh 20vw 0 20vw;
+    font-size: 15px;
+    text-align: center;
+}
+#logo{
+    text-align: center;
+    font-size: 7vh;
+    color: orange;
+    font-family: 'Lobster', cursive;
+}
+
+
+#contact{
+    margin: 0 0 15vh 0;
+    font-size: 15px;
+}
+#questions{
+    margin: 0 0 5vh 0;
+    font-size: 15px;
+}
+#input {
+    margin: 5vh 0 0 0;   
+}
+#text{
+    font-size: 15px;
+}
+
+textarea {
+    width: 100%;
+    height: 5vh;
+    border-radius: 3px;
+    border-color: transparent;
+    margin-top: 5px;
+  }
+#filters_shell{
+    height: 8vh;
+    width: 100%; 
+    background-color: #7a9eb1;
+    opacity: 0.9;
+}
+.types {
+    display: inline-block;
+    height: auto;
+    width: 25%;
+}
+.active {
+    background-color: lightgray;   
+    height: 100%;
+    width: auto; 
+    padding: 3vh 0;
+    text-align: center;
+}
+.nonactive { 
+    background-color: darkgray;   
+    height: 100%;
+    width: auto; 
+    padding: 3vh 0;
+    text-align: center;
+}
+button{
+    border: none;
+    background-color: transparent;
+}

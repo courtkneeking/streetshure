@@ -1,0 +1,46 @@
+<button (click) = "showQuestions()">Questions</button>
+<div *ngIf = "show.questions == true">
+  <table>
+  <tr>
+    <th>question</th>
+    <th>answer</th>
+    <th>options</th>
+  </tr>
+  <tr *ngFor = "let q of questions">
+    <td><strong>{{q.text}} </strong></td>
+    <td>{{q.answer}}</td>
+    <td><button (click) = "showForm(q)">Edit</button>
+    <button (click) = "deleteQuestion(q._id)">Delete</button></td>
+    </tr>
+  </table>
+</div>
+
+
+
+<button (click) = "showMessages()">Messages</button>
+<div *ngIf = "show.messages == true">
+  <table>
+  <tr>
+    <th>message</th>
+    <th>email</th>
+    <th>options</th>
+  </tr>
+  <tr *ngFor = "let m of messages">
+    <td><strong>{{m.text}}</strong></td>
+    <td>{{m.email}}</td>
+    <td><button (click) = "deleteMessage(m._id)">Delete</button></td>
+  </tr>
+  </table>
+</div>
+
+<div *ngIf = "show.question_form == true">
+<form (submit)="editQuestion(question)">
+    <p>Question:
+      <input type="text" name="question.text" [(ngModel)]="question.text" value = "question.text">
+    </p>
+    <p>Answer:
+        <input type="text" name="question.answer" [(ngModel)]="question.answer" value = "question.answer">
+      </p>
+    <input type="submit" value="Edit">
+  </form>
+</div>

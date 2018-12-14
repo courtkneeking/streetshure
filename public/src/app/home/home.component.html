@@ -1,0 +1,77 @@
+
+    <div id = "settings_shell" >
+      <button [routerLink]="['/']" class = "navbar_buttons">
+          Get started  <img src = "assets/images/right_arrow.png">
+      </button> 
+  </div>
+  <div *ngIf = "show.logo == true">
+      <div id = "page">
+          <div id = "logo">Street Shure</div>
+      </div>
+  </div>
+  <div *ngIf = "show.logo == false">
+      <div id = "page">
+          <div *ngFor = "let t of types">
+              <div *ngIf = "t.show == true" >
+                <div *ngIf = "t.name == 'About Site'">
+                  <div id = "text">
+                        Street Sure is an application to give current, up-to-date information about the parking regulations within a half-mile radius of the user's current location, as well as the locations of public parking garages in metropolitan cities.
+                  </div>
+                </div>
+                <div *ngIf = "t.name == 'FAQs'">
+                  <div id = "questions">
+                      FAQs
+                      <div *ngFor = "let q of questions"> 
+                        {{q.text}}
+                      </div>
+                  </div>
+                  <button [routerLink]="['edit']">Edit</button>
+                  <form (submit) = "addQuestion()" class="form-group">
+                        <div class = 'row'>
+                            <div class="col-10">
+                                <input class="form-control" type="text" name = "newQuestion.text" [(ngModel)]="newQuestion.text" placeholder = "question">
+                            </div>
+                            <button type = "submit" class="col-2 btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <div *ngIf = "t.name == 'Coming Soon'">
+                  <div id = "text">coming soon</div>
+                </div>
+                <div *ngIf = "t.name == 'Additional Resources'">
+                  <div id = "text">coming soon</div>
+                </div>
+                <div *ngIf = "t.name == 'Contact'">
+                    <div id = "contact">
+                    Courtney King <br> Las Vegas, NV <br>courtneyshmourtney@gmail.com<br>
+                    </div>
+                    <form (submit) = "addMessage()" class="form-group">
+                        <div class = 'row'>
+                            <div class="col-10">
+                                <input class="form-control" type="text" name = "newMessage.email" [(ngModel)]="newMessage.email" placeholder = "email">
+                            </div>
+                            <button type = "submit" class="col-2 btn btn-primary">Submit</button>
+                        </div>
+                        <div class = 'row'>
+                            <div class="col-10"><textarea name = "newMessage.text" [(ngModel)]="newMessage.text" placeholder = "write your message here. "></textarea></div>
+                        </div>
+                    </form>
+                </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div id = "filters_shell" >
+      <div *ngFor = "let t of types" class = "types">
+          <div *ngIf = "t.show == true" class = "active" >
+              <span class = "text">
+                  <button (click) = "changeTypes(t)">{{t.name}}</button>
+              </span>  
+          </div>
+          <div *ngIf = "t.show == false" class = "nonactive">
+              <span class = "text">
+                  <button (click) = "changeTypes(t)">{{t.name}}</button>
+              </span>
+          </div> 
+      </div>
+  </div> 

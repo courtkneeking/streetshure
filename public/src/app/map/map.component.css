@@ -1,0 +1,255 @@
+* {
+    font-size: 10px;
+}
+agm-map {
+    height: 84vh;
+    width: 100vw;
+}
+#settings_shell {
+    height: 8vh;
+    width: 100%;
+    background-color: #7a9eb1;
+    text-align: center;
+}
+#home_button{
+    position: absolute;
+    left: 3vw;
+    top: 3vh;
+}
+#settings_menu {
+    position: absolute;
+    right: 3vw;
+    top: 3vh;
+}
+.navbar_buttons{
+    padding: 3vh;
+}
+img {
+    height: 15px;
+    width: 15px;
+}
+
+
+/* settings dropdown   */
+#settings_button_group {
+    width: 100%;
+}
+.dropdown-toggle{
+    background-color: transparent; 
+}
+#settings_dropdown {
+    font-size: 10px;
+    width: 35vw;
+    position: absolute;
+    top: 8vh;
+    right: 0;
+    height: auto;
+    background-color:white;
+    box-shadow: 0 2px 2px 0px darkgray;
+}
+.settings_buttons {
+    background-color:white;
+}
+.settings_inputs {
+    width: 100%;
+    height: 5vh;
+    background-color: white;
+    padding: 1vh 2vw 1vh 1vw;
+    font-size: 8px;
+}
+/* settings dropdown   */
+
+
+
+/* bottom navbar   */
+#filters_shell{
+    height: 8vh;
+    width: 100%; 
+    background-color: #7a9eb1;
+    opacity: 0.9;
+}
+.types {
+    display: inline-block;
+    height: 100%;
+    width: 25%;
+}
+.active {
+    background-color: lightgray;   
+    height: 100%;
+    width: auto; 
+    padding: 3vh 0;
+    text-align: center;
+}
+.nonactive { 
+    background-color: darkgray;   
+    height: 100%;
+    width: auto; 
+    padding: 3vh 0;
+    text-align: center;
+}
+/* bottom navbar   */
+
+/* sign popup  */
+.time {
+    width: 13vw;
+    display: inline-block;
+    margin-left: 10px;
+}
+.sign {
+    height: 10vh;
+    width: 20vw;
+    padding: 0.5vw;
+    display: inline-block;
+}
+.sign_text{
+    width: 9vw;
+    display: inline-block;
+    font-size: 8px;
+    padding: 0.5vw;
+}
+.sign_text button{
+    background-color: lightgray;
+}
+/* sign popup   */
+
+/* for signs in realtime  */
+.inactive_opacity{
+    opacity: 0.7;
+    height: 9vh;
+    width: 9vw;
+    vertical-align: top;
+}
+.active_opacity{
+    opacity: 1.0;
+    height: 9vh;
+    width: 9vw;
+    vertical-align: top;
+}
+/* for signs in realtime  */
+
+@media only screen and (max-width: 600px) {
+    .sign {
+        height: 10vh;
+        width: 40vw;
+        padding: 0.5vw;
+        display: inline-block;
+        overflow: visible;
+    }
+    .sign_text{
+        width: 24vw;
+        display: inline-block;
+        font-size: 8px;
+        padding-top: 1vh;    
+    }
+    .centered{
+        text-align: center;
+    }
+    .inactive_opacity{
+        opacity: 0.7;
+        height: 9vh;
+        width: 14vw;
+        vertical-align: top;
+    }
+    .active_opacity{
+        opacity: 1.0;
+        height: 9vh;
+        width: 14vw;
+        vertical-align: top;
+    }
+}
+button{
+    border: none;
+    background-color: transparent;
+}
+input{
+   border: none;
+}
+button:focus{
+   outline:none !important;
+}
+input:focus{
+    outline:none !important;
+}
+
+/* base popup function  */
+.popup .popuptext {
+    visibility: hidden;
+    background-color: darkgray;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+} 
+.popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+/* base popup function */
+
+/* tutorial popups  */
+#infoPopup{
+    margin-left: -80px;
+    top: 125%;  
+    left: 50%; 
+    width: 100px;
+}
+#homePopup {
+    margin-left: -10px;
+    top: 125%;  
+    left: 50%; 
+    width: 100px;
+}
+#locationPopup {
+    margin-left: 0px;
+    top: 85%;  
+    left: 10%; 
+    width: 100px;
+}
+/* tutorial popups  */
+
+/* additional sign info popups  */
+#signInfoPopup {
+    min-width: 40vw;
+    height: 15vh;
+    overflow: scroll;
+}
+#info{
+    position: absolute;
+    bottom: 26vh;
+    left: 2vw;
+}
+#info .popup, #info .popuptext{
+    border-radius: 2px;
+    box-shadow: 0 2px 2px 0px darkgray;
+    background-color: lightgoldenrodyellow;
+    color: black;
+    padding: 5px; 
+}
+/* additional sign info popups  */
+
+
+/* i button popups  */
+.b_info{
+    background-color: white !important;
+}
+.b_info img{
+    height: 10px;
+    width: 10px;
+}
+/* i button popups  */
+
+
+
+
