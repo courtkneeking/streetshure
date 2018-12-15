@@ -136,21 +136,21 @@ export class MapComponent implements OnInit {
     this.getTime();
   }
   getLocation(location, locationMarker){
-      location.lat = 40.69072064707795
-      location.lng = -73.98944844972948
+      // location.lat = 40.69072064707795
+      // location.lng = -73.98944844972948
+      // locationMarker.lat = location.lat;
+      // locationMarker.lng = location.lng;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(geoSuccess);
+    } else { 
+      alert('geolocation isnt supoorted in this browser, check your privacy settings')
+    }
+    function geoSuccess(position) {
+      location.lat = position.coords.latitude;
+      location.lng = position.coords.longitude;
       locationMarker.lat = location.lat;
       locationMarker.lng = location.lng;
-    // if (navigator.geolocation) {
-    //   navigator.geolocation.getCurrentPosition(geoSuccess);
-    // } else { 
-    //   alert('geolocation isnt supoorted in this browser, check your privacy settings')
-    // }
-    // function geoSuccess(position) {
-    //   location.lat = position.coords.latitude;
-    //   location.lng = position.coords.longitude;
-    //   location_marker.lat = location.lat;
-    //   location_marker.lng = location.lng;
-    // }
+    }
   }
   changeMarker(marker){
     this.show.spots = false;
