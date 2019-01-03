@@ -4,8 +4,8 @@ var path = require('path');
 var bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/streetshure', { useNewUrlParser: true });
-// mongoose.connect('mongodb://localhost/streetshure', { useNewUrlParser: true });
+//mongoose.connect('mongodb://127.0.0.1:27017/streetshure', { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost/streetshure', { useNewUrlParser: true });
 var db = mongoose.connection;
 
 app.use(bodyParser.urlencoded({extended: true}));

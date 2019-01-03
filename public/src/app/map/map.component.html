@@ -41,86 +41,274 @@
 <!-- top navbar  -->
 
 <!-- map -->
-  <agm-map [latitude]="location.lat" [longitude]="location.lng" [zoom] = "map.zoom">
+<agm-map [latitude]="location.lat" [longitude]="location.lng" [zoom] = "map.zoom">
     <agm-marker (dragEnd) = "stopMarker($event, this.locationMarker)" [latitude]="location.lat" [longitude]="location.lng" [markerDraggable] = "locationMarker.draggable" [iconUrl]= "locationMarker.iconUrl" ></agm-marker> 
     <div *ngIf = "show.spots == true">
       <div *ngFor = "let sp of spots">
-        <agm-marker 
-          [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "markers.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.markers">
-          <div *ngFor = "let s of sp.sign">
-            <div *ngIf = "show.street_cleaning == true">
-              <div *ngIf = "s.category == 'street_cleaning'">
+        <div *ngFor = "let s of sp.sign">
+          <div *ngIf = "show.street_cleaning == true">
+            <div *ngIf = "s.category == 'street_cleaning'">
+              <agm-marker 
+                [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "sweeper.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.sweeper">
                 <agm-snazzy-info-window [padding] = "infoWindow.padding">
-                  <ng-template>
-                    <div class = "sign">  
-                      <img class = "{{s.active}}" src = "{{s.image}}">
-                      <div class = "sign_text">
-                        {{s.type}}<br>
-                        <span class = "centered">
-                          {{s.days}}<br>{{s.time}}<br>
-                          <button *ngIf = "s.active == 'inactive_opacity'"  (click) = "parkHere(s)">Park</button>
-                          <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
-                              <img src = "assets/images/b_info.png" >
-                          </button>
-                        </span>
-                      </div>
-                    </div>
-                  </ng-template>
-                </agm-snazzy-info-window>
-              </div>
-            </div>
-            <div *ngIf = "show.meter == true">
-              <div *ngIf = "s.category == 'meter'">
-                <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
                     <ng-template>
-                      <div class = "sign">
-                        <img class = "{{s.active}}" src = "{{s.image}}">
-                        <div class = "sign_text">
+                      <div class = "sign">  
                           {{s.type}}<br>
                           <span class = "centered">
                             {{s.days}}<br>{{s.time}}<br>
-                            <button (click) = "parkHere(s)">Park</button>
-                            <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                            <button *ngIf = "s.active == 'inactive_opacity'"  (click) = "parkHere(s)">Park</button>
+                            <button class = "popup b_info" (click) = "showInfo($event, s)" >
                                 <img src = "assets/images/b_info.png" >
                             </button>
                           </span>
-                        </div>
+                          <div *ngIf = "showTemp == true">
+                            {{this.temp}}
+                          </div>
                       </div>
                     </ng-template>
                   </agm-snazzy-info-window>
-              </div>
+              </agm-marker>
             </div>
-            <div *ngIf = "show.other == true">
-              <div *ngIf = "s.category == 'other'">
+          </div>
+          <div *ngIf = "show.meter == true">
+            <div *ngIf = "s.category == 'meter'">
+              <agm-marker 
+                [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "meter.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.meter">
                 <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
                   <ng-template>
-                    <div class = "sign">
-                      <img class = "{{s.active}}" src = "{{s.image}}">
-                      <div class = "sign_text">
-                        {{s.type}}<br>
-                        <span class = "centered">
-                          {{s.days}}<br>{{s.time}}<br>
-                          <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
-                          <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
-                          <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
-                              <img src = "assets/images/b_info.png" >
-                          </button>
-                        </span>
-                      </div>
+                    <div class = "sign">        
+                      {{s.type}}<br>
+                      <span class = "centered">
+                        {{s.days}}<br>{{s.time}}<br>
+                        <button (click) = "parkHere(s)">Park</button>
+                        <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                            <img src = "assets/images/b_info.png" >
+                        </button>
+                      </span>
                     </div>
                   </ng-template>
                 </agm-snazzy-info-window>
+              </agm-marker>
+            </div>
+          </div>
+          <div *ngIf = "show.other == true">
+            <div *ngIf = "s.category == 'other'">
+              <div *ngIf = "s.park == 'never'">
+                <div *ngIf = "s.type == 'BUS STOP'">
+                  <agm-marker 
+                    [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "bus.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.bus">
+                    <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                      <ng-template>
+                        <div class = "sign">
+                            {{s.type}}<br>
+                            <span class = "centered">
+                              {{s.days}}<br>{{s.time}}<br>
+                              <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                  <img src = "assets/images/b_info.png" >
+                              </button>
+                            </span>
+                        </div>
+                      </ng-template>
+                    </agm-snazzy-info-window>
+                  </agm-marker>
+                </div>
+                <div *ngIf = "s.type == 'NO PARKING ANYTIME'">
+                  <agm-marker 
+                    [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "noParkingAnytime.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.noParkingAnytime">
+                    <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                      <ng-template>
+                        <div class = "sign">
+                            {{s.type}}<br>
+                            <span class = "centered">
+                              {{s.days}}<br>{{s.time}}<br>
+                              <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                  <img src = "assets/images/b_info.png" >
+                              </button>
+                            </span>
+                        </div>
+                      </ng-template>
+                    </agm-snazzy-info-window>
+                  </agm-marker>
+                </div>
+                <div *ngIf = "s.type == 'NO STANDING ANYTIME'">
+                  <agm-marker 
+                    [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "noStandingAnytime.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.noStandingAnytime">
+                    <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                      <ng-template>
+                        <div class = "sign">
+                            {{s.type}}<br>
+                            <span class = "centered">
+                              {{s.days}}<br>{{s.time}}<br>
+                              <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                  <img src = "assets/images/b_info.png" >
+                              </button>
+                            </span>
+                        </div>
+                      </ng-template>
+                    </agm-snazzy-info-window>
+                  </agm-marker>
+                </div>
+              </div>
+              <div *ngIf = "s.park == 'sometimes'">
+                <div *ngIf = "s.type == 'AUTHORIZED VEHICLES ONLY'">
+                  <agm-marker 
+                    [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "authorized.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.authorized">
+                    <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                      <ng-template>
+                        <div class = "sign">
+                            {{s.type}}<br>
+                            <span class = "centered">
+                              {{s.days}}<br>{{s.time}}<br>
+                              <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                  <img src = "assets/images/b_info.png" >
+                              </button>
+                            </span>
+                        </div>
+                      </ng-template>
+                    </agm-snazzy-info-window>
+                  </agm-marker>
+                </div>
+                <div *ngIf = "s.type == 'SCHOOL ZONE'">
+                  <agm-marker 
+                    [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "school.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.school">
+                    <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                      <ng-template>
+                        <div class = "sign">
+                            {{s.type}}<br>
+                            <span class = "centered">
+                              {{s.days}}<br>{{s.time}}<br>
+                              <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                  <img src = "assets/images/b_info.png" >
+                              </button>
+                            </span>
+                        </div>
+                      </ng-template>
+                    </agm-snazzy-info-window>
+                  </agm-marker>
+                </div>
+                <div *ngIf = "s.type == 'NO PARKING'">
+                  <agm-marker 
+                    [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "noParking.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.noParking">
+                    <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                      <ng-template>
+                        <div class = "sign">
+                            {{s.type}}<br>
+                            <span class = "centered">
+                              {{s.days}}<br>{{s.time}}<br>
+                              <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                  <img src = "assets/images/b_info.png" >
+                              </button>
+                            </span>
+                        </div>
+                      </ng-template>
+                    </agm-snazzy-info-window>
+                  </agm-marker>
+                </div>
+                <div *ngIf = "s.type == 'NO STANDING'">
+                  <agm-marker 
+                    [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "noStanding.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.noStanding">
+                    <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                      <ng-template>
+                        <div class = "sign">
+                            {{s.type}}<br>
+                            <span class = "centered">
+                              {{s.days}}<br>{{s.time}}<br>
+                              <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                  <img src = "assets/images/b_info.png" >
+                              </button>
+                            </span>
+                        </div>
+                      </ng-template>
+                    </agm-snazzy-info-window>
+                  </agm-marker>
+                </div>
+              </div>
+              <div *ngIf = "s.park == '?'">
+                <div *ngIf = "s.type == 'TAXI'">
+                  <agm-marker 
+                    [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "taxi.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.taxi">
+                    <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                      <ng-template>
+                        <div class = "sign">
+                            {{s.type}}<br>
+                            <span class = "centered">
+                              {{s.days}}<br>{{s.time}}<br>
+                              <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                  <img src = "assets/images/b_info.png" >
+                              </button>
+                            </span>
+                        </div>
+                      </ng-template>
+                    </agm-snazzy-info-window>
+                  </agm-marker>
+                </div>
+                <div *ngIf = "s.type == 'TRUCK'">
+                  <agm-marker 
+                    [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "truck.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.truck">
+                    <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                      <ng-template>
+                        <div class = "sign">
+                            {{s.type}}<br>
+                            <span class = "centered">
+                              {{s.days}}<br>{{s.time}}<br>
+                              <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                  <img src = "assets/images/b_info.png" >
+                              </button>
+                            </span>
+                        </div>
+                      </ng-template>
+                    </agm-snazzy-info-window>
+                  </agm-marker>
+                </div>
+                <div *ngIf = "s.type == 'NO STOPPING'">
+                  <agm-marker 
+                    [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "noStopping.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.noStopping">
+                    <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                      <ng-template>
+                        <div class = "sign">
+                            {{s.type}}<br>
+                            <span class = "centered">
+                              {{s.days}}<br>{{s.time}}<br>
+                              <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                              <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                  <img src = "assets/images/b_info.png" >
+                              </button>
+                            </span>
+                        </div>
+                      </ng-template>
+                    </agm-snazzy-info-window>
+                  </agm-marker>
+                </div>
               </div>
             </div>
           </div>
-        </agm-marker>
+        </div>
       </div>
     </div>
     <div *ngIf = "show.garages == true">
       <div *ngFor = "let g of garages">
         <agm-marker 
           [latitude]= "g.geometry.coordinates[1]" [longitude]= "g.geometry.coordinates[0]" [iconUrl]= "garageMarkers.iconUrl" (markerClick)= "clickGarage(g)">
-          <agm-info-window>{{g.geometry.coordinates[1]}}, {{g.geometry.coordinates[0]}}</agm-info-window>
+        <agm-info-window>{{g.geometry.coordinates[1]}}, {{g.geometry.coordinates[0]}}</agm-info-window>
         </agm-marker>
       </div>
     </div>
@@ -128,6 +316,7 @@
       <agm-marker [latitude]="parked.lat" [longitude]="parked.lng" [iconUrl]= "parkedMarker.iconUrl" ></agm-marker> 
     </div>
   </agm-map>
+
 <!-- map -->
 <!-- bottom navbar -->
 <div id = "filters_shell" >
@@ -162,3 +351,209 @@
 
 <!-- map  -->
 </body>
+
+<!-- map
+<agm-map [latitude]="location.lat" [longitude]="location.lng" [zoom] = "map.zoom">
+  <agm-marker (dragEnd) = "stopMarker($event, this.locationMarker)" [latitude]="location.lat" [longitude]="location.lng" [markerDraggable] = "locationMarker.draggable" [iconUrl]= "locationMarker.iconUrl" ></agm-marker> 
+  <div *ngIf = "show.spots == true">
+    <div *ngFor = "let sp of spots">
+      <agm-marker 
+        [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "markers.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.markers">
+        <div *ngFor = "let s of sp.sign">
+          <div *ngIf = "show.street_cleaning == true">
+            <div *ngIf = "s.category == 'street_cleaning'">
+              <agm-snazzy-info-window [padding] = "infoWindow.padding">
+                <ng-template>
+                  <div class = "sign">  
+                    <img class = "{{s.active}}" src = "{{s.image}}">
+                    <div class = "sign_text">
+                      {{s.type}}<br>
+                      <span class = "centered">
+                        {{s.days}}<br>{{s.time}}<br>
+                        <button *ngIf = "s.active == 'inactive_opacity'"  (click) = "parkHere(s)">Park</button>
+                        <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                            <img src = "assets/images/b_info.png" >
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                </ng-template>
+              </agm-snazzy-info-window>
+            </div>
+          </div>
+          <div *ngIf = "show.meter == true">
+            <div *ngIf = "s.category == 'meter'">
+              <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                  <ng-template>
+                    <div class = "sign">
+                      <img class = "{{s.active}}" src = "{{s.image}}">
+                      <div class = "sign_text">
+                        {{s.type}}<br>
+                        <span class = "centered">
+                          {{s.days}}<br>{{s.time}}<br>
+                          <button (click) = "parkHere(s)">Park</button>
+                          <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                              <img src = "assets/images/b_info.png" >
+                          </button>
+                        </span>
+                      </div>
+                    </div>
+                  </ng-template>
+                </agm-snazzy-info-window>
+            </div>
+          </div>
+          <div *ngIf = "show.other == true">
+            <div *ngIf = "s.category == 'other'">
+              <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                <ng-template>
+                  <div class = "sign">
+                    <img class = "{{s.active}}" src = "{{s.image}}">
+                    <div class = "sign_text">
+                      {{s.type}}<br>
+                      <span class = "centered">
+                        {{s.days}}<br>{{s.time}}<br>
+                        <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                        <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                        <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                            <img src = "assets/images/b_info.png" >
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                </ng-template>
+              </agm-snazzy-info-window>
+            </div>
+          </div>
+        </div>
+      </agm-marker>
+    </div>
+  </div>
+  <div *ngIf = "show.garages == true">
+    <div *ngFor = "let g of garages">
+      <agm-marker 
+        [latitude]= "g.geometry.coordinates[1]" [longitude]= "g.geometry.coordinates[0]" [iconUrl]= "garageMarkers.iconUrl" (markerClick)= "clickGarage(g)">
+        <agm-info-window>{{g.geometry.coordinates[1]}}, {{g.geometry.coordinates[0]}}</agm-info-window>
+      </agm-marker>
+    </div>
+  </div>
+  <div *ngIf = "show.parked == true">
+    <agm-marker [latitude]="parked.lat" [longitude]="parked.lng" [iconUrl]= "parkedMarker.iconUrl" ></agm-marker> 
+  </div>
+</agm-map>
+
+
+
+
+  <agm-map [latitude]="location.lat" [longitude]="location.lng" [zoom] = "map.zoom">
+    <agm-marker (dragEnd) = "stopMarker($event, this.locationMarker)" [latitude]="location.lat" [longitude]="location.lng" [markerDraggable] = "locationMarker.draggable" [iconUrl]= "locationMarker.iconUrl" ></agm-marker> 
+    <div *ngIf = "show.spots == true">
+      <div *ngFor = "let sp of spots">
+        <div *ngFor = "let s of sp.sign">
+          <div *ngIf = "show.street_cleaning == true">
+            <div *ngIf = "s.category == 'street_cleaning'">
+              <agm-marker 
+                [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "sweeper.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.sweeper">
+                <agm-snazzy-info-window [padding] = "infoWindow.padding">
+                    <ng-template>
+                      <div class = "sign">  
+                          {{s.type}}<br>
+                          <span class = "centered">
+                            {{s.days}}<br>{{s.time}}<br>
+                            <button *ngIf = "s.active == 'inactive_opacity'"  (click) = "parkHere(s)">Park</button>
+                            <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                <img src = "assets/images/b_info.png" >
+                            </button>
+                          </span>
+                      </div>
+                    </ng-template>
+                  </agm-snazzy-info-window>
+              </agm-marker>
+            </div>
+          </div>
+          <div *ngIf = "show.meter == true">
+            <div *ngIf = "s.category == 'meter'">
+              <agm-marker 
+                [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "meter.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.meter">
+                <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                  <ng-template>
+                    <div class = "sign">        
+                      {{s.type}}<br>
+                      <span class = "centered">
+                        {{s.days}}<br>{{s.time}}<br>
+                        <button (click) = "parkHere(s)">Park</button>
+                        <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                            <img src = "assets/images/b_info.png" >
+                        </button>
+                      </span>
+                    </div>
+                  </ng-template>
+                </agm-snazzy-info-window>
+              </agm-marker>
+            </div>
+          </div>
+          <div *ngIf = "show.other == true">
+            <div *ngIf = "s.category == 'other'">
+              <div *ngIf = "s.park == 'never'">
+                <agm-marker 
+                  [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "parking.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.parking">
+                  <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                    <ng-template>
+                      <div class = "sign">
+                        <img class = "{{s.active}}" src = "{{s.image}}">
+                        <div class = "sign_text">
+                          {{s.type}}<br>
+                          <span class = "centered">
+                            {{s.days}}<br>{{s.time}}<br>
+                            <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                            <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                            <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                <img src = "assets/images/b_info.png" >
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </agm-snazzy-info-window>
+                </agm-marker>
+              </div>
+              <div *ngIf = "s.park !== 'never'">
+                <agm-marker 
+                  [latitude]= "sp.coordinates[1]" [longitude]= "sp.coordinates[0]" [iconUrl]= "noParking.iconUrl" (markerClick) = "spotClick(sp)" [visible] = "sp.noParking">
+                  <agm-snazzy-info-window [wrapperClass]="'si-content-marker'" [padding] = "infoWindow.padding" [fontColor] = "infoWindow.color" >
+                    <ng-template>
+                      <div class = "sign">
+                        <img class = "{{s.active}}" src = "{{s.image}}">
+                        <div class = "sign_text">
+                          {{s.type}}<br>
+                          <span class = "centered">
+                            {{s.days}}<br>{{s.time}}<br>
+                            <button *ngIf = "s.park == 'sometimes' && s.active == 'inactive_opacity'" (click) = "parkHere(s)">Park</button>
+                            <button *ngIf = "s.park == 'always' && s.active == 'active_opacity'" (click) = "parkHere(s)">Park</button>
+                            <button class = "popup b_info" (mouseover) = "showInfo($event, s)" >
+                                <img src = "assets/images/b_info.png" >
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </agm-snazzy-info-window>
+                </agm-marker>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf = "show.garages == true">
+      <div *ngFor = "let g of garages">
+        <agm-marker 
+          [latitude]= "g.geometry.coordinates[1]" [longitude]= "g.geometry.coordinates[0]" [iconUrl]= "garageMarkers.iconUrl" (markerClick)= "clickGarage(g)">
+        <agm-info-window>{{g.geometry.coordinates[1]}}, {{g.geometry.coordinates[0]}}</agm-info-window>
+        </agm-marker>
+      </div>
+    </div>
+    <div *ngIf = "show.parked == true">
+      <agm-marker [latitude]="parked.lat" [longitude]="parked.lng" [iconUrl]= "parkedMarker.iconUrl" ></agm-marker> 
+    </div>
+  </agm-map>
+ -->

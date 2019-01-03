@@ -47,12 +47,133 @@ export class MapComponent implements OnInit {
     lng: '',
   };
   spots: any;
-  markers: object = {
+  sweeper: object = {
     iconUrl : {
-      url: 'assets/images/red_icon.png',
+      url: 'assets/images/icons/sweeper.png',
       scaledSize: {
-        width: 20,
-        height: 20,
+        width: 25,
+        height: 25,
+      },
+    },
+    draggable: true,
+    infoWindow: 'new QueryList<AgmInfoWindow>()',
+  };
+  meter: object = {
+    iconUrl : {
+      url: 'assets/images/icons/meter.png',
+      scaledSize: {
+        width: 30,
+        height: 30,
+      },
+    },
+    draggable: true,
+    infoWindow: 'new QueryList<AgmInfoWindow>()',
+  };
+  noParkingAnytime: object = {
+    iconUrl : {
+      url: 'assets/images/icons/noParkingAnytime.png',
+      scaledSize: {
+        width: 30,
+        height: 30,
+      },
+    },
+    draggable: true,
+    infoWindow: 'new QueryList<AgmInfoWindow>()',
+  };
+  noStandingAnytime: object = {
+    iconUrl : {
+      url: 'assets/images/icons/noStandingAnytime.png',
+      scaledSize: {
+        width: 30,
+        height: 30,
+      },
+    },
+    draggable: true,
+    infoWindow: 'new QueryList<AgmInfoWindow>()',
+  };
+  bus: object = {
+    iconUrl : {
+      url: 'assets/images/icons/bus.png',
+      scaledSize: {
+        width: 30,
+        height: 30,
+      },
+    },
+    draggable: true,
+    infoWindow: 'new QueryList<AgmInfoWindow>()',
+  };
+  school: object = {
+    iconUrl : {
+      url: 'assets/images/icons/school.png',
+      scaledSize: {
+        width: 30,
+        height: 30,
+      },
+    },
+    draggable: true,
+    infoWindow: 'new QueryList<AgmInfoWindow>()',
+  };
+  noParking: object = {
+    iconUrl : {
+      url: 'assets/images/icons/noParking.png',
+      scaledSize: {
+        width: 30,
+        height: 30,
+      },
+    },
+    draggable: true,
+    infoWindow: 'new QueryList<AgmInfoWindow>()',
+  };
+  noStanding: object = {
+    iconUrl : {
+      url: 'assets/images/icons/noStanding.jpg',
+      scaledSize: {
+        width: 30,
+        height: 30,
+      },
+    },
+    draggable: true,
+    infoWindow: 'new QueryList<AgmInfoWindow>()',
+  };
+  authorized: object = {
+    iconUrl : {
+      url: 'assets/images/icons/authorized.png',
+      scaledSize: {
+        width: 30,
+        height: 30,
+      },
+    },
+    draggable: true,
+    infoWindow: 'new QueryList<AgmInfoWindow>()',
+  };
+  taxi: object = {
+    iconUrl : {
+      url: 'assets/images/icons/taxi.png',
+      scaledSize: {
+        width: 30,
+        height: 30,
+      },
+    },
+    draggable: true,
+    infoWindow: 'new QueryList<AgmInfoWindow>()',
+  };
+  truck: object = {
+    iconUrl : {
+      url: 'assets/images/icons/truck.png',
+      scaledSize: {
+        width: 30,
+        height: 30,
+      },
+    },
+    draggable: true,
+    infoWindow: 'new QueryList<AgmInfoWindow>()',
+  };
+  noStopping: object = {
+    iconUrl : {
+      url: 'assets/images/icons/question.png',
+      scaledSize: {
+        width: 30,
+        height: 30,
       },
     },
     draggable: true,
@@ -61,7 +182,7 @@ export class MapComponent implements OnInit {
   garages;
   garageMarkers: object = {
     iconUrl : {
-      url: 'assets/images/garage_pin.png',
+      url: 'assets/images/icons/garage.png',
       scaledSize: {
         width: 20,
         height: 20,
@@ -129,6 +250,14 @@ export class MapComponent implements OnInit {
     filters: {show: false, message: 'toggle these buttons to hide and show the desired parking types in the area', popup: 'filtersPopup'},
   }
   temp;
+  point: object = {
+    lat: 0,
+    lng: 0,
+  }
+  tempShow = false;
+
+ 
+
   constructor(private _httpService: HttpService, private _route: ActivatedRoute, private _router: Router){
   }
   ngOnInit() {
@@ -146,8 +275,12 @@ export class MapComponent implements OnInit {
       alert('geolocation isnt supoorted in this browser, check your privacy settings')
     }
     function geoSuccess(position) {
-      location.lat = position.coords.latitude;
-      location.lng = position.coords.longitude;
+      // location.lat = position.coords.latitude;
+      // location.lng = position.coords.longitude;
+      // locationMarker.lat = location.lat;
+      // locationMarker.lng = location.lng;
+      location.lat = 40.68264125866496;
+      location.lng = -73.9426539887962;
       locationMarker.lat = location.lat;
       locationMarker.lng = location.lng;
     }
@@ -166,7 +299,9 @@ export class MapComponent implements OnInit {
     console.log($event.coords.lng)
   }
   confirmMarker(marker){
-    console.log('confirmMarker()')
+    this.point = {lat: marker.lat, lng: marker.lng};
+    console.log(this.point, 'oint')
+    console.log(this.point, 'thispont')
     var geocoder = new google.maps.Geocoder();  
     var latLng = new google.maps.LatLng(marker.lat, marker.lng);
       if (geocoder) {
@@ -193,22 +328,22 @@ export class MapComponent implements OnInit {
     });
   }
   makeMarkers(array){
-    console.log('makeMarkers()')
     if(array.length == 0){
       alert('There is currently no data in your current location. Click here to see the areas covered.')
     }else{
-      console.log('all info' , array);
+      console.log('array,' , array)
       this.spots = [];
       this.spots.push({'coordinates' : array[0].geometry.coordinates, 'signs' : [array[0].properties.SIGNDESC1.toLowerCase()]});
-      var current = 0;
+      // var current = 0;
       for(var i = 1; i < array.length; i++){
-        if(array[i].geometry.coordinates[0] == this.spots[current].coordinates[0] && array[i].geometry.coordinates[1] == this.spots[current].coordinates[1]){
-          this.spots[current].signs.push(array[i].properties.SIGNDESC1.toLowerCase());
-        }else{
+        // if(array[i].geometry.coordinates[0] == this.spots[current].coordinates[0] && array[i].geometry.coordinates[1] == this.spots[current].coordinates[1]){
+        //   this.spots[current].signs.push(array[i].properties.SIGNDESC1.toLowerCase());
+        // }else{
           this.spots.push({'coordinates' : array[i].geometry.coordinates, 'signs' : [array[i].properties.SIGNDESC1.toLowerCase()]})
-          current++;
-        }
+        //   current++;
+        // }
       }
+      console.log('this spots' , this.spots)
       this.getSpotInfo(this.spots);
     }
   }
@@ -247,7 +382,7 @@ export class MapComponent implements OnInit {
               str = b.join(' ');
             }
             days.push(str);
-            result[j] = "" 
+       
           }else if(time_test == true){
             if(hyphen == true){
               var a = str;
@@ -265,7 +400,6 @@ export class MapComponent implements OnInit {
           x.arrows = arrows.join(" ");
           x.sign = result.join(" ");
         }
-
         var broom = x.sign.includes('broom');
         var meter = x.sign.includes('meter');
         var bus = x.sign.includes('bus');
@@ -294,57 +428,48 @@ export class MapComponent implements OnInit {
           spot.contains.push('other');
           if (bus == true){
             x.type = "BUS STOP";
-            x.image = "assets/images/signs/bus_stop.png";
             x.park = "never";
           }else if (standing == true){
             if(x.time == "anytime"){
               x.type = "NO STANDING ANYTIME";
-              x.image = "assets/images/signs/no_standing_anytime.png";
               x.park = "never";
             }else{
               x.type = "NO STANDING";
-              x.image = "assets/images/signs/no_standing.png";
               x.park = "sometimes";
             }
           }else if(parking == true){
-            if(spot.time == "anytime"){
+            if(x.time == "anytime"){
               x.type = "NO PARKING ANYTIME";
-              x.image = "assets/images/signs/no_parking_anytime.png"
               x.park = "never";
             }else{
               x.type = "NO PARKING";
-              x.image = "assets/images/question.png"
               x.park = "sometimes";
             }
           }else if(truck == true){
             x.type = "TRUCKS";
-            x.image = "assets/images/signs/truck.png";
+            x.park = "?"
           }else if(taxi == true){
             x.type = "TAXI"
-            x.image = "assets/images/signs/taxi.png"
+            x.park = "?"
           }else if(stopping == true){
             x.type = "NO STOPPING";
-            x.image = "assets/images/signs/no_stopping.png"
           }else if(star == true){
             if(school == true){
               x.type = "SCHOOL ZONE"
-              x.image = "assets/images/signs/school.png";
               x.park = "sometimes";
             }else{
               x.type = "AUTHORIZED VEHICLES ONLY"
-              x.image = "assets/images/question.png"
               x.park = "sometimes";
             }
           }else{
             x.type = "?"
-            x.image = "assets/images/question.png"
           }
-        }if(x.type !== "?"){
+        }
+        if(x.type !== "?"){
           spot.sign.push(x);
         }else{
           console.log('not pushed ?', x)
         }
- 
       }
       spot.markers = this.markerObjs.some(el => spot.contains.includes(el))
     }
@@ -558,6 +683,7 @@ export class MapComponent implements OnInit {
     console.log('y', y)
     var popup = document.getElementById(s);
     popup.classList.toggle("show");
+    this.tempShow = true;
   }
 
   // settings dropdown

@@ -1,0 +1,26 @@
+{
+  "name": "streetshure",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongoose": "^5.3.12"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/courtkneeking/streetshure.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/courtkneeking/streetshure/issues"
+  },
+  "homepage": "https://github.com/courtkneeking/streetshure#readme"
+}

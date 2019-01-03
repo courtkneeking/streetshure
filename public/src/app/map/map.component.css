@@ -96,21 +96,17 @@ img {
     margin-left: 10px;
 }
 .sign {
-    height: 10vh;
-    width: 20vw;
+    height: auto;
+    width: 10vw;
     padding: 0.5vw;
-    display: inline-block;
-}
-.sign_text{
-    width: 9vw;
     display: inline-block;
     font-size: 8px;
-    padding: 0.5vw;
+    text-align: center;
 }
 .sign_text button{
     background-color: lightgray;
-}
-/* sign popup   */
+} 
+
 
 /* for signs in realtime  */
 .inactive_opacity{
