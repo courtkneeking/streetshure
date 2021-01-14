@@ -26,7 +26,7 @@ import { EditComponent } from './edit/edit.component';
     HttpClientModule,
     FormsModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDbmzGCyGGxvS37ctNWIOk8UeGP9OtNLzg' //Google API key for maps
+      apiKey: '{{google_maps_key}}'
     }),
     AgmDirectionModule, 
     AppRoutingModule,
